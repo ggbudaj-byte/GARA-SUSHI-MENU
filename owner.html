@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>가라스시 사장님 앱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --brand-red: #c52828;
+      --brand-black: #262626;
+      --bg-panel: #fdf9f5;
+      --line-soft: #e6ddd4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3eee8;
+      color: var(--brand-black);
+    }
+
+    header {
+      background: linear-gradient(to bottom, #ffffff, #f7f2ec);
+      border-bottom: 2px solid var(--line-soft);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffe8d7, #ffb989);
+      border: 2px solid #f0b07b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4b2b1c;
+    }
+
+    .head-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .head-small {
+      font-size: 0.75rem;
+      color: #777;
+    }
+
+    .head-main {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .layout {
+      max-width: 960px;
+      margin: 10px auto 20px;
+      padding: 0 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 10px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+
+    .info {
+      font-size: 0.8rem;
+      color: #777;
+      margin-bottom: 6px;
+    }
+
+    .menu-list {
+      max-height: 70vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menu-item {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 8px;
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid #e0d7cf;
+      background: #fff;
+    }
+
+    .menu-thumb {
+      width: 80px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #f0e3d8;
+    }
+
+    .menu-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.8rem;
+    }
+
+    .menu-name-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .menu-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .menu-category {
+      font-size: 0.75rem;
+      color: #a06a41;
+    }
+
+    .menu-price {
+      color: var(--brand-red);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .menu-actions {
+      margin-top: 4px;
+      display: flex;
+      gap: 4px;
+    }
+
+    button {
+      cursor: pointer;
+      border-radius: 999px;
+      border: none;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+    }
+
+    .btn-small {
+      background: #eee;
+    }
+
+    .btn-small.danger {
+      background: #ffd6d6;
+      color: #b30000;
+    }
+
+    .btn-main {
+      background: var(--brand-red);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    input, textarea, select {
+      padding: 6px 7px;
+      border-radius: 6px;
+      border: 1px solid #d2c7bc;
+      font-size: 0.8rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 40px;
+    }
+
+    .form-footer {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .msg {
+      font-size: 0.75rem;
+      color: #777;
+    }
+
+    .msg.ok {
+      color: #008000;
+    }
+
+    .msg.err {
+      color: #b30000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-circle">가라<br>스시</div>
+    <div class="head-text">
+      <span class="head-small">사장님 전용 관리 앱</span>
+      <span class="head-main">가라스시 메뉴 관리</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- 왼쪽: 메뉴 리스트 -->
+    <section class="card">
+      <h2 class="card-title">현재 메뉴 목록</h2>
+      <p class="info">※ 지금은 연습용입니다. 나중에 손님용 메뉴판과 자동 연동되게 만들 거예요.</p>
+      <div id="menuList" class="menu-list"></div>
+    </section>
+
+    <!-- 오른쪽: 메뉴 추가/수정 폼 -->
+    <section class="card">
+      <h2 class="card-title" id="formTitle">새 메뉴 추가</h2>
+      <p class="info">사진 파일 직접 올리는 기능은 나중 단계에서 붙이고, 지금은 사진 주소(이미지 URL)를 적는 방식으로 연습해요.</p>
+
+      <form id="menuForm" class="form-grid">
+        <input type="hidden" id="menuId" />
+
+        <label>
+          카테고리
+          <select id="menuCategory">
+            <option value="모둠초밥">모둠초밥</option>
+            <option value="연어초밥">연어초밥</option>
+            <option value="단품초밥">단품초밥</option>
+            <option value="롤">롤</option>
+            <option value="식사류">식사류</option>
+            <option value="사이드">사이드</option>
+          </select>
+        </label>
+
+        <label>
+          메뉴 이름
+          <input id="menuName" type="text" placeholder="예: 가라 특선 모둠초밥 (10p)" required />
+        </label>
+
+        <label>
+          가격 (숫자만)
+          <input id="menuPrice" type="number" placeholder="예: 15000" required />
+        </label>
+
+        <label>
+          설명
+          <textarea id="menuDesc" placeholder="예: 참치, 연어, 광어 등 인기 네타 10pcs 구성"></textarea>
+        </label>
+
+        <label>
+          사진 주소(이미지 URL)
+          <input id="menuImage" type="text" placeholder="나중에 사진 링크 적는 곳" />
+        </label>
+
+        <div class="form-footer">
+          <button type="submit" class="btn-main" id="saveBtn">저장하기</button>
+          <button type="button" class="btn-small" id="resetBtn">새로 입력</button>
+          <span id="formMsg" class="msg"></span>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    // 임시로 메모리 안에만 저장하는 데이터 (나중에 Firebase로 교체 예정)
+    let menus = [
+      {
+        id: "set_01",
+        category: "모둠초밥",
+        name: "가라 특선 모둠초밥 (10p)",
+        price: 15000,
+        desc: "참치, 연어, 광어, 새우 등 인기 네타 10pcs 구성",
+        imageUrl: ""
+      },
+      {
+        id: "salmon_01",
+        category: "연어초밥",
+        name: "생연어 초밥 (8p)",
+        price: 13000,
+        desc: "노르웨이 생연어로만 구성된 메뉴",
+        imageUrl: ""
+      }
+    ];
+
+    const menuListEl = document.getElementById("menuList");
+    const form = document.getElementById("menuForm");
+    const formTitle = document.getElementById("formTitle");
+    const formMsg = document.getElementById("formMsg");
+    const resetBtn = document.getElementById("resetBtn");
+    const saveBtn = document.getElementById("saveBtn");
+
+    const idInput = document.getElementById("menuId");
+    const catInput = document.getElementById("menuCategory");
+    const nameInput = document.getElementById("menuName");
+    const priceInput = document.getElementById("menuPrice");
+    const descInput = document.getElementById("menuDesc");
+    const imgInput = document.getElementById("menuImage");
+
+    function formatPrice(p) {
+      const n = Number(p);
+      if (isNaN(n)) return p;
+      return "₩" + n.toLocaleString("ko-KR");
+    }
+
+    function renderList() {
+      menuListEl.innerHTML = "";
+      if (menus.length === 0) {
+        menuListEl.innerHTML = "<p class='info'>등록된 메뉴가 없습니다. 오른쪽에서 추가해 보세요.</p>";
+        return;
+      }
+
+      menus.forEach((m) => {
+        const wrap = document.createElement("div");
+        wrap.className = "menu-item";
+
+        const img = document.createElement("img");
+        img.className = "menu-thumb";
+        img.alt = m.name;
+        img.src = m.imageUrl && m.imageUrl.trim() !== "" 
+          ? m.imageUrl 
+          : "https://via.placeholder.com/160x100?text=SUSHI";
+        img.onerror = function () {
+          this.src = "https://via.placeholder.com/160x100?text=SUSHI";
+        };
+
+        const info = document.createElement("div");
+        info.className = "menu-info";
+
+        const nameLine = document.createElement("div");
+        nameLine.className = "menu-name-line";
+
+        const nameEl = document.createElement("div");
+        nameEl.className = "menu-name";
+        nameEl.textContent = m.name;
+
+        const priceEl = document.createElement("div");
+        priceEl.className = "menu-price";
+        priceEl.textContent = formatPrice(m.price);
+
+        nameLine.appendChild(nameEl);
+        nameLine.appendChild(priceEl);
+
+        const catEl = document.createElement("div");
+        catEl.className = "menu-category";
+        catEl.textContent = m.category;
+
+        const descEl = document.createElement("div");
+        descEl.textContent = m.desc || "";
+        descEl.style.fontSize = "0.75rem";
+        descEl.style.color = "#666";
+
+        const actions = document.createElement("div");
+        actions.className = "menu-actions";
+
+        const editBtn = document.createElement("button");
+        editBtn.className = "btn-small";
+        editBtn.textContent = "수정";
+        editBtn.onclick = () => loadToForm(m.id);
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "btn-small danger";
+        delBtn.textContent = "삭제";
+        delBtn.onclick = () => deleteMenu(m.id);
+
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        info.appendChild(nameLine);
+        info.appendChild(catEl);
+        info.appendChild(descEl);
+        info.appendChild(actions);
+
+        wrap.appendChild(img);
+        wrap.appendChild(info);
+        menuListEl.appendChild(wrap);
+      });
+    }
+
+    function loadToForm(id) {
+      const m = menus.find(v => v.id === id);
+      if (!m) return;
+      formTitle.textContent = "메뉴 수정";
+      saveBtn.textContent = "수정 저장";
+      formMsg.textContent = "";
+
+      idInput.value = m.id;
+      catInput.value = m.category;
+      nameInput.value = m.name;
+      priceInput.value = m.price;
+      descInput.value = m.desc || "";
+      imgInput.value = m.imageUrl || "";
+    }
+
+    function resetForm() {
+      formTitle.textContent = "새 메뉴 추가";
+      saveBtn.textContent = "저장하기";
+      formMsg.textContent = "";
+      idInput.value = "";
+      nameInput.value = "";
+      priceInput.value = "";
+      descInput.value = "";
+      imgInput.value = "";
+      catInput.value = "모둠초밥";
+    }
+
+    function deleteMenu(id) {
+      if (!confirm("정말 이 메뉴를 삭제할까요?")) return;
+      menus = menus.filter(m => m.id !== id);
+      renderList();
+      formMsg.textContent = "메뉴가 삭제되었습니다. (지금은 앱 안에서만 삭제됨)";
+      formMsg.className = "msg ok";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      formMsg.textContent = "";
+      const name = nameInput.value.trim();
+      const price = Number(priceInput.value);
+      if (!name || !price) {
+        formMsg.textContent = "이름과 가격을 입력해 주세요.";
+        formMsg.className = "msg err";
+        return;
+      }
+
+      const data = {
+        id: idInput.value || ("menu_" + Date.now()),
+        category: catInput.value,
+        name: name,
+        price: price,
+        desc: descInput.value.trim(),
+        imageUrl: imgInput.value.trim()
+      };
+
+      const idx = menus.findIndex(m => m.id === data.id);
+      if (idx >= 0) {
+        menus[idx] = data;
+        formMsg.textContent = "메뉴가 수정되었습니다. (지금은 앱 안에서만 저장됨)";
+      } else {
+        menus.push(data);
+        formMsg.textContent = "새 메뉴가 추가되었습니다. (지금은 앱 안에서만 저장됨)";
+      }
+      formMsg.className = "msg ok";
+      renderList();
+      resetForm();
+    });
+
+    resetBtn.addEventListener("click", resetForm);
+
+    renderList();
+  </script>
+</body>
+</html>
