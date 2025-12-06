@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>가라스시 메뉴판</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 글씨체 (인터넷 연결 시 적용) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand-red: #c52828;   /* 로고 붉은색 느낌 */
+      --brand-black: #262626; /* 진한 글자색 */
+      --bg-panel: #fdf9f5;    /* 냉장고 패널 배경 느낌 */
+      --line-soft: #e6ddd4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3eee8;
+      color: var(--brand-black);
+    }
+
+    /* ===== 상단 로고 영역 (냉장고 문 느낌) ===== */
+    .hero {
+      background: linear-gradient(to bottom, #ffffff, #f7f2ec);
+      border-bottom: 3px solid var(--line-soft);
+      padding: 18px 16px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .hero-panel {
+      background: var(--bg-panel);
+      border: 2px solid var(--line-soft);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+    }
+
+    .logo-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffe8d7, #ffb989);
+      border: 2px solid #f0b07b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4b2b1c;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-small {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #7a7a7a;
+    }
+
+    .logo-main {
+      margin-top: 4px;
+      display: flex;
+      gap: 4px;
+      align-items: flex-end;
+    }
+
+    .logo-main-big {
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: 0.1rem;
+      color: var(--brand-black);
+    }
+
+    .logo-main-red {
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--brand-red);
+    }
+
+    .logo-sub {
+      margin-top: 3px;
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+    .table-label {
+      margin-top: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #444;
+    }
+
+    /* ===== 레이아웃 ===== */
+    .layout {
+      display: flex;
+      max-width: 1100px;
+      margin: 12px auto 24px;
+      padding: 0 12px 16px;
+      gap: 16px;
+    }
+
+    /* 왼쪽 카테고리 */
+    .sidebar {
+      min-width: 170px;
+      max-width: 220px;
+      background: #faf1e6;
+      border-radius: 14px;
+      border: 1px solid var(--line-soft);
+      padding: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      height: fit-content;
+      position: sticky;
+      top: 96px;
+    }
+
+    .sidebar-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: #7a4d2f;
+    }
+
+    .sidebar-desc {
+      font-size: 0.75rem;
+      margin: 0 0 10px;
+      color: #9a7a54;
+    }
+
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .category-btn {
+      border: none;
+      background: #ffe0d3;
+      color: var(--brand-black);
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+    }
+
+    .category-btn:hover {
+      background: #ffc6b0;
+      transform: translateY(-1px);
+    }
+
+    .category-btn.active {
+      background: var(--brand-red);
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.18);
+    }
+
+    /* 오른쪽 메뉴 영역 */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .notice {
+      background: #fff3da;
+      border-radius: 10px;
+      border: 1px solid #f0cf93;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      color: #72501f;
+    }
+
+    .notice strong {
+      margin-right: 4px;
+    }
+
+    .section-title {
+      margin: 2px 0 0;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--brand-black);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-sub {
+      margin: 2px 0 4px;
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    /* 메뉴 카드: 냉장고 문 느낌 */
+    .menu-card {
+      background: var(--bg-panel);
+      border-radius: 14px;
+      border: 2px solid var(--line-soft);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px 8px 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-panel-top {
+      text-align: left;
+      padding: 4px 2px 4px;
+    }
+
+    .menu-panel-line {
+      width: 30%;
+      height: 3px;
+      background: var(--brand-red);
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+
+    .menu-name {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--brand-black);
+    }
+
+    .menu-desc {
+      margin: 2px 0 0;
+      font-size: 0.78rem;
+      color: #7a7a7a;
+      min-height: 26px;
+    }
+
+    .menu-img-wrap {
+      margin-top: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 96px;
+    }
+
+    .menu-img {
+      max-width: 90%;
+      max-height: 90px;
+      border-radius: 10px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .menu-bottom {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .menu-price {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--brand-red);
+    }
+
+    .menu-tag {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #ffeaea;
+      color: #c72c2c;
+      border: 1px solid #ffc0c0;
+    }
+
+    .menu-badge {
+      font-size: 0.75rem;
+      color: #9b8b7c;
+    }
+
+    .empty-text {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 10px;
+    }
+
+    /* 반응형 */
+    @media (max-width: 960px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .hero-panel {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: static;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        padding: 12px 8px;
+      }
+      .logo-main-big,
+      .logo-main-red {
+        font-size: 1.45rem;
+      }
+      .logo-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== 로고 / 상단 영역 ===== -->
+  <header class="hero">
+    <div class="hero-panel">
+      <div class="logo-icon">
+        <!-- 여기 나중에 캐릭터 그림 넣어도 됨 -->
+        가라<br>스시
+      </div>
+      <div class="logo-text">
+        <div class="logo-small">회전초밥 전문점</div>
+        <div class="logo-main">
+          <span class="logo-main-big">가라</span>
+          <span class="logo-main-red">스시</span>
+        </div>
+        <div class="logo-sub">신선한 재료로 정성껏 준비합니다</div>
+        <div id="tableLabel" class="table-label" style="display:none;"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 메인 레이아웃 ===== -->
+  <div class="layout">
+    <!-- 왼쪽 카테고리 -->
+    <aside class="sidebar">
+      <p class="sidebar-title">메뉴 카테고리</p>
+      <p class="sidebar-desc">보고 싶은 종류를 선택해 주세요.</p>
+      <div id="categoryList" class="category-list"></div>
+    </aside>
+
+    <!-- 오른쪽 메뉴 -->
+    <main class="content">
+      <div class="notice">
+        <strong>안내</strong> 계절과 재료 수급에 따라 실제 제공되는 구성은 조금씩 달라질 수 있습니다.
+      </div>
+
+      <div>
+        <h2 id="sectionTitle" class="section-title"></h2>
+        <p id="sectionSub" class="section-sub"></p>
+      </div>
+
+      <section id="menuGrid" class="menu-grid"></section>
+      <p id="emptyText" class="empty-text" style="display:none;">해당 카테고리에 등록된 메뉴가 없습니다.</p>
+    </main>
+  </div>
+
+  <script>
+    // ===== 0. 테이블 번호 (QR에 ?table=1 이런 식으로 넘길 때) =====
+    (function showTableFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const table = params.get("table");
+      if (!table) return;
+      const label = document.getElementById("tableLabel");
+      label.textContent = table + "번 테이블 메뉴판";
+      label.style.display = "block";
+    })();
+
+    // ===== 1. 메뉴 데이터 (여기만 가게 메뉴로 바꿔 쓰면 됨) =====
+    const menuData = [
+      // 모둠초밥
+      {
+        id: "set_01",
+        category: "모둠초밥",
+        name: "가라 특선 모둠초밥 (10p)",
+        price: 15000,
+        desc: "참치, 연어, 광어, 새우 등 인기 네타 10pcs 구성",
+        tag: "추천",
+        badge: "사장님 추천 세트",
+        imageUrl: ""   // 나중에 사진 주소 넣기
+      },
+      {
+        id: "set_02",
+        category: "모둠초밥",
+        name: "가라 모둠초밥 (8p)",
+        price: 12000,
+        desc: "부담 없이 즐기기 좋은 기본 모둠",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+
+      // 연어초밥
+      {
+        id: "salmon_01",
+        category: "연어초밥",
+        name: "생연어 초밥 (8p)",
+        price: 13000,
+        desc: "노르웨이 생연어로만 구성된 연어 라인 베스트",
+        tag: "베스트",
+        badge: "연어 좋아하는 분께 강추",
+        imageUrl: ""
+      },
+      {
+        id: "salmon_02",
+        category: "연어초밥",
+        name: "불맛 연어 초밥 (8p)",
+        price: 13500,
+        desc: "겉은 살짝 그을려 고소한 풍미 가득",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+
+      // 단품초밥 (예시)
+      {
+        id: "tuna_01",
+        category: "단품초밥",
+        name: "참치 초밥 (2p)",
+        price: 4000,
+        desc: "담백한 참치 두 점",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+      {
+        id: "ikura_01",
+        category: "단품초밥",
+        name: "연어알 군함 (2p)",
+        price: 4500,
+        desc: "톡톡 터지는 연어알",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+
+      // 롤
+      {
+        id: "roll_01",
+        category: "롤",
+        name: "새우튀김 롤",
+        price: 10000,
+        desc: "바삭한 새우튀김이 통째로 들어간 가라스시 대표 롤",
+        tag: "인기",
+        badge: "아이들이 좋아해요",
+        imageUrl: ""
+      },
+      {
+        id: "roll_02",
+        category: "롤",
+        name: "드래곤 롤",
+        price: 14000,
+        desc: "장어와 아보카도가 올라간 스페셜 롤",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+
+      // 식사류
+      {
+        id: "rice_01",
+        category: "식사류",
+        name: "연어 덮밥",
+        price: 11000,
+        desc: "연어를 듬뿍 올린 한 그릇",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+      {
+        id: "rice_02",
+        category: "식사류",
+        name: "알밥",
+        price: 8000,
+        desc: "톡톡 터지는 날치알과 채소가 어우러진 덮밥",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+
+      // 사이드
+      {
+        id: "side_01",
+        category: "사이드",
+        name: "우동",
+        price: 5000,
+        desc: "따끈한 국물과 쫄깃한 면",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      },
+      {
+        id: "side_02",
+        category: "사이드",
+        name: "미니 샐러드",
+        price: 3000,
+        desc: "상큼하게 곁들이기 좋은 샐러드",
+        tag: "",
+        badge: "",
+        imageUrl: ""
+      }
+    ];
+
+    // ===== 2. 카테고리 만들기 =====
+    const categories = Array.from(new Set(menuData.map(m => m.category)));
+    let currentCategory = categories[0] || null;
+
+    const categoryListEl = document.getElementById("categoryList");
+    const menuGridEl = document.getElementById("menuGrid");
+    const emptyTextEl = document.getElementById("emptyText");
+    const sectionTitleEl = document.getElementById("sectionTitle");
+    const sectionSubEl = document.getElementById("sectionSub");
+
+    function formatPrice(price) {
+      const num = Number(price);
+      if (isNaN(num)) return price;
+      return "₩" + num.toLocaleString("ko-KR");
+    }
+
+    function getCategorySub(cat) {
+      switch (cat) {
+        case "모둠초밥":
+          return "여러 가지 초밥을 한 번에 즐길 수 있는 대표 세트입니다.";
+        case "연어초밥":
+          return "연어 좋아하시는 손님께 추천드리는 메뉴입니다.";
+        case "단품초밥":
+          return "원하시는 초밥만 골라 드실 수 있어요.";
+        case "롤":
+          return "식사와 안주로 모두 잘 어울리는 롤입니다.";
+        case "식사류":
+          return "든든하게 한 끼 식사로 드시기 좋은 메뉴입니다.";
+        case "사이드":
+          return "메인 메뉴와 함께 곁들이면 더 맛있어요.";
+        default:
+          return "";
+      }
+    }
+
+    function renderCategories() {
+      categoryListEl.innerHTML = "";
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "category-btn";
+        btn.textContent = cat;
+        if (cat === currentCategory) btn.classList.add("active");
+        btn.addEventListener("click", () => {
+          currentCategory = cat;
+          renderCategories();
+          renderMenu();
+        });
+        categoryListEl.appendChild(btn);
+      });
+    }
+
+    function renderMenu() {
+      menuGridEl.innerHTML = "";
+      emptyTextEl.style.display = "none";
+
+      if (!currentCategory) {
+        sectionTitleEl.textContent = "메뉴 준비중";
+        sectionSubEl.textContent = "";
+        emptyTextEl.textContent = "아직 등록된 메뉴가 없습니다.";
+        emptyTextEl.style.display = "block";
+        return;
+      }
+
+      sectionTitleEl.textContent = currentCategory;
+      sectionSubEl.textContent = getCategorySub(currentCategory);
+
+      const items = menuData.filter(m => m.category === currentCategory);
+      if (items.length === 0) {
+        emptyTextEl.textContent = "해당 카테고리에 등록된 메뉴가 없습니다.";
+        emptyTextEl.style.display = "block";
+        return;
+      }
+
+      items.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "menu-card";
+
+        // 위쪽 글자 부분
+        const top = document.createElement("div");
+        top.className = "menu-panel-top";
+
+        const line = document.createElement("div");
+        line.className = "menu-panel-line";
+
+        const nameEl = document.createElement("p");
+        nameEl.className = "menu-name";
+        nameEl.textContent = item.name;
+
+        const descEl = document.createElement("p");
+        descEl.className = "menu-desc";
+        descEl.textContent = item.desc || "";
+
+        top.appendChild(line);
+        top.appendChild(nameEl);
+        top.appendChild(descEl);
+
+        // 가운데 이미지
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "menu-img-wrap";
+        const img = document.createElement("img");
+        img.className = "menu-img";
+        img.alt = item.name;
+        img.src = item.imageUrl && item.imageUrl.trim() !== ""
+          ? item.imageUrl
+          : "https://via.placeholder.com/260x150?text=SUSHI";
+        img.onerror = function () {
+          this.src = "https://via.placeholder.com/260x150?text=SUSHI";
+        };
+        imgWrap.appendChild(img);
+
+        // 아래 가격 / 태그
+        const bottom = document.createElement("div");
+        bottom.className = "menu-bottom";
+
+        const priceEl = document.createElement("span");
+        priceEl.className = "menu-price";
+        priceEl.textContent = formatPrice(item.price);
+
+        bottom.appendChild(priceEl);
+
+        const rightBox = document.createElement("div");
+        rightBox.style.textAlign = "right";
+
+        if (item.tag) {
+          const tagEl = document.createElement("span");
+          tagEl.className = "menu-tag";
+          tagEl.textContent = item.tag;
+          rightBox.appendChild(tagEl);
+        }
+
+        if (item.badge) {
+          const badgeEl = document.createElement("div");
+          badgeEl.className = "menu-badge";
+          badgeEl.textContent = item.badge;
+          rightBox.appendChild(badgeEl);
+        }
+
+        bottom.appendChild(rightBox);
+
+        card.appendChild(top);
+        card.appendChild(imgWrap);
+        card.appendChild(bottom);
+        menuGridEl.appendChild(card);
+      });
+    }
+
+    // 처음 한 번 그리기
+    renderCategories();
+    renderMenu();
+  </script>
+</body>
+</html>
